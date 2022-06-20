@@ -14,7 +14,7 @@ import {
   ResourceList,
 } from "@shopify/polaris";
 import useFetchApi from "../hooks/useFetchApi";
-import requestOptions from "./requestOptions";
+import makeRequest from "./makeRequest";
 
 const TodoPage = () => {
   const [value, setValue] = useState("");
@@ -51,21 +51,14 @@ const TodoPage = () => {
       setLoading(true);
       const data = {
         name: name,
-        price: 80,
-        description: "Description product 8",
-        product: "Product type 8",
-        color: "Color product 8",
-        createdAt: "2020-06-8",
-        image: "url/img/product8",
-        status: false,
       };
-      const response = await fetch(
-        "http://localhost:5000/api/todos",
-        requestOptions("POST", data)
-      );
-      const product = await response.json();
+      const todo = await makeRequest({
+        url: "/api/todos",
+        method: "POST",
+        body: data,
+      });
       setTodo((prev) => {
-        return [...prev, product];
+        return [...prev, todo];
       });
     } catch (error) {
       console.error(error);
@@ -76,55 +69,54 @@ const TodoPage = () => {
 
   const updateTodo = async (id, name) => {
     try {
+      setLoading(true)
       const data = {
         name: name,
       };
-      const response = await fetch(
-        "http://localhost:5000/api/todo/" + id,
-        requestOptions("PUT", data)
-      );
-      const product = await response.json();
-      setTodo((prev) => {
-        return prev;
-      });
+      const todo = await makeRequest({
+        url: "/api/todo/" + id,
+        method: "PUT",
+        body: data
+      })
+      setTodo(todo);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false)
     }
   };
 
   const removeTodo = async (id) => {
     try {
-        setLoading(true)
-      const response = await fetch(
-        "http://localhost:5000/api/todo/" + id,
-        requestOptions("DELETE")
-      );
-      const product = await response.json();
-      setTodo((prev) => {
-        return prev;
-      });
+      setLoading(true);
+      const todo = await makeRequest({
+        url: "/api/todo/" + id,
+        method: "DELETE",
+      })
+      setTodo(todo);
     } catch (error) {
       console.error(error);
     } finally {
-        setLoading(false)
+      setLoading(false);
     }
   };
 
   const completeTodo = async (id) => {
     try {
+      setLoading(true)
       const data = {
         status: true,
       };
-      const response = await fetch(
-        "http://localhost:5000/api/todo/" + id,
-        requestOptions("PUT", data)
-      );
-      const product = await response.json();
-      setTodo((prev) => {
-        return prev;
-      });
+      const todo = await makeRequest({
+        url: "/api/todo/"+ id,
+        method: "PUT",
+        body: data
+      })
+      setTodo(todo);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false)
     }
   };
   const modalCreat = (
