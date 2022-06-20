@@ -6,7 +6,7 @@ export default function useFetchApi({ url, datas }) {
 
   async function fetchData() {
     try {
-     setLoading(true)
+      setLoading(true);
       const res = await fetch(url);
       const respData = await res.json();
 
@@ -14,7 +14,7 @@ export default function useFetchApi({ url, datas }) {
     } catch (error) {
       console.log(error);
     } finally {
-        setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -25,6 +25,7 @@ export default function useFetchApi({ url, datas }) {
   return {
     data,
     setData,
-    loading
+    loading,
+    setLoading,
   };
 }
